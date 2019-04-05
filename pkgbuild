@@ -1,0 +1,38 @@
+# Maintainer: name <e@mail.adresse>
+
+# https://wiki.archlinux.org/index.php/PKGBUILD
+# https://wiki.archlinux.org/index.php/Arch_packaging_standards
+# https://wiki.archlinux.org/index.php/Creating_packages
+
+pkgname="PaketName"
+pkgver=z.yx
+pkgrel=z
+pkgdesc='Was macht dieses Paket?'
+url='https://example.com/to/irgendwas'
+arch=('any')
+license=('deine_license')
+makedepends=('pakete' 'die' 'man' 'zum' 'bauen' 'braucht')
+depends=('pakete' 'die' 'man' 'zum' 'nutzen' 'braucht')
+optdepends=('pakete' 'die' 'man' 'eventuell' 'brauchen' 'koennte')
+source=("wo findet man diese paket?")
+sha256sums=('')
+
+# nachfolgend anpassen
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  export PBR_VERSION="${pkgver}"
+  python setup.py build
+}
+
+check(){
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  tox -e py3
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  export PBR_VERSION="${pkgver}"
+  python setup.py install --root="${pkgdir}" --optimize=1 --skip-build
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
